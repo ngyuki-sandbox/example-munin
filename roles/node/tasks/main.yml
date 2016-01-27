@@ -1,0 +1,18 @@
+---
+
+- yum: name={{ item }}
+  with_items:
+    - epel-release
+    - munin-node
+
+- copy: src=./{{ item }} dest=/{{ item }}
+  with_items:
+    - /etc/munin/munin-node.conf
+  notify:
+    - munin-node restart
+
+- service: name=munin-node state=started enabled=yes
+
+- name: munin-node check
+  shell: echo "fetch load" | nc localhost 4949
+  changed_when: no

@@ -1,0 +1,42 @@
+---
+
+- yum: name={{ item }}
+  with_items:
+    - epel-release
+    - httpd
+    - munin
+    - net-snmp-utils
+
+- copy: src=./{{ item }} dest=/{{ item }}
+  with_items:
+    - /etc/munin/munin.conf
+    - /etc/munin/munin-node.conf
+    - /etc/munin/conf.d/example.conf
+    - /etc/munin/plugin-conf.d/zzz-snmp
+  notify:
+    - munin-node restart
+
+- service: name=munin-node state=started enabled=yes
+
+- name: munin-node check
+  shell: echo "fetch load" | nc localhost 4949
+  changed_when: no
+
+- name: munin-htpasswd generate
+  shell: sudo htpasswd -bc /etc/munin/munin-htpasswd munin pass
+  args:
+    creates: /etc/munin/munin-htpasswd
+
+- service: name=httpd state=started enabled=yes
+
+- name: munin snmp plugin check
+  shell: |
+    munin-node-configure --snmp 192.168.33.10 --snmpcommunity oreore --shell
+  register: res
+  always_run: yes
+  changed_when: res.stdout|length
+
+- name: munin snmp plugin install
+  shell: |
+    munin-node-configure --snmp 192.168.33.10 --snmpcommunity oreore --shell | bash -x
+  when: res|changed

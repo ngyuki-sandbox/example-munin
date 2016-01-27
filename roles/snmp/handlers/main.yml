@@ -1,0 +1,4 @@
+---
+
+- name: snmpd restart
+  service: name=snmpd state=restarted

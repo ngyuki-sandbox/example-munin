@@ -1,0 +1,12 @@
+---
+
+- hosts: munin-node-servers
+  sudo: yes
+  roles:
+    - node
+    - snmp
+
+- hosts: munin-master-servers
+  sudo: yes
+  roles:
+    - munin

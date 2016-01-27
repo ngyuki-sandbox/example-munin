@@ -1,0 +1,4 @@
+[snmp_192.168.33.10_*]
+env.community oreore
+env.version 1
+host_name web-by-snmp

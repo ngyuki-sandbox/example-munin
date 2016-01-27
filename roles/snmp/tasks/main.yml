@@ -1,0 +1,16 @@
+---
+
+- yum: name={{ item }}
+  with_items:
+    - net-snmp
+    - net-snmp-utils
+
+- copy: src={{ item }} dest=/etc/snmp/
+  with_items:
+    - snmpd.conf
+  notify: snmpd restart
+
+- service: name=snmpd state=started enabled=yes
+
+- shell: snmpwalk -v2c -c oreore localhost system
+  changed_when: no
