@@ -3,8 +3,12 @@
 - yum: name={{ item }}
   with_items:
     - epel-release
+
+- yum: name={{ item }}
+  with_items:
     - httpd
     - munin
+    - munin-cgi
     - net-snmp-utils
 
 - copy: src=./{{ item }} dest=/{{ item }}
@@ -22,10 +26,13 @@
   shell: echo "fetch load" | nc localhost 4949
   changed_when: no
 
+- stat: path=/etc/munin/munin-htpasswd
+  register: res
+  changed_when: res.stat.size == 0
+
 - name: munin-htpasswd generate
-  shell: sudo htpasswd -bc /etc/munin/munin-htpasswd munin pass
-  args:
-    creates: /etc/munin/munin-htpasswd
+  shell: htpasswd -bc /etc/munin/munin-htpasswd munin pass
+  when: res|changed
 
 - service: name=httpd state=started enabled=yes
 

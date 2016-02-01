@@ -1,6 +1,7 @@
 Vagrant.configure(2) do |config|
-  #config.vm.box = "ngyuki/centos-7"
   config.vm.box = "bento/centos-7.1"
+  #config.ssh.insert_key = false
+  #config.ssh.forward_agent = true
 
   config.vm.define "web" do |config|
     config.vm.hostname = "web"
@@ -14,11 +15,10 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "shell", inline: <<-SHELL
-    sudo yum -y install vim-enhanced mailx nc ansible
-  #  sudo yum install --downloadonly munin munin-node munin-cgi httpd net-snmp net-snmp-utils
-  #  mkdir /tmp/munin-contrib
-  #  wget -q https://github.com/munin-monitoring/contrib/archive/master.tar.gz -O - |
-  #    tar xzf - -C /tmp/munin-contrib --strip-components=1
+    sudo yum -y install vim-enhanced mailx nc epel-release
+    sudo yum -y install ansible
+    cp /vagrant/hosts.ini /home/vagrant/
+    chmod -x /home/vagrant/hosts.ini
   SHELL
 
   config.vm.provider :virtualbox do |v|

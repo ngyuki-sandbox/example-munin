@@ -3,6 +3,9 @@
 - yum: name={{ item }}
   with_items:
     - epel-release
+
+- yum: name={{ item }}
+  with_items:
     - munin-node
 
 - copy: src=./{{ item }} dest=/{{ item }}
