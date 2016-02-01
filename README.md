@@ -34,3 +34,7 @@ open http://localhost:1234/
 ```
 
 `munin:pass` でログインする。
+
+----
+
+See: [Munin を触ってみた - Qiita](http://qiita.com/ngyuki/items/9ceac312d9dadc52d659)
