@@ -58,6 +58,7 @@
     mkdir -p /etc/munin/munstrap
     wget https://github.com/munin-monitoring/contrib/archive/master.tar.gz -O - |
       tar xzf - -C /tmp/munin-contrib --strip-components=1
+    rm -fr /var/www/html/munin/static
     rsync -av /tmp/munin-contrib/templates/munstrap/static/    /etc/munin/munstrap/static/
     rsync -av /tmp/munin-contrib/templates/munstrap/templates/ /etc/munin/munstrap/templates/
     rm -fr /tmp/munin-contrib

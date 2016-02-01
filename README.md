@@ -23,6 +23,7 @@ Ansible でプロビジョニング。
 
 ```sh
 cd /vagrant
+ansible all -m ping
 ansible-playbook all.yml
 ```
 
