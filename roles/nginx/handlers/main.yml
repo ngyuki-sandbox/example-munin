@@ -1,0 +1,7 @@
+---
+
+- name: nginx check
+  shell: nginx -t
+
+- name: nginx restart
+  service: name=nginx state=restarted

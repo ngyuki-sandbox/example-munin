@@ -6,9 +6,7 @@
 
 - yum: name={{ item }}
   with_items:
-    - httpd
     - munin
-    - munin-cgi
     - net-snmp-utils
 
 - copy: src=./{{ item }} dest=/{{ item }}
@@ -19,20 +17,6 @@
     - /etc/munin/plugin-conf.d/zzz-snmp
   notify:
     - munin-node restart
-
-- service: name=munin-node state=started enabled=yes
-
-- name: munin-node check
-  shell: echo "fetch load" | nc localhost 4949
-  changed_when: no
-
-- stat: path=/etc/munin/munin-htpasswd
-  register: res
-  changed_when: res.stat.size == 0
-
-- name: munin-htpasswd generate
-  shell: htpasswd -bc /etc/munin/munin-htpasswd munin pass
-  when: res|changed
 
 - name: munin snmp plugin check
   shell: |
@@ -46,7 +30,7 @@
     munin-node-configure --snmp 192.168.33.10 --snmpcommunity oreore --shell | bash -x
   when: res|changed
 
-- stat: path=/etc/munin/munstrap/templates/
+- stat: path=/etc/munin/contrib/munstrap/templates/
   register: res
   changed_when: not res.stat.exists
 
@@ -55,13 +39,19 @@
     set -eux
     rm -fr /tmp/munin-contrib
     mkdir -p /tmp/munin-contrib
-    mkdir -p /etc/munin/munstrap
+    mkdir -p /etc/munin/contrib/munstrap
     wget https://github.com/munin-monitoring/contrib/archive/master.tar.gz -O - |
       tar xzf - -C /tmp/munin-contrib --strip-components=1
     rm -fr /var/www/html/munin/static
-    rsync -av /tmp/munin-contrib/templates/munstrap/static/    /etc/munin/munstrap/static/
-    rsync -av /tmp/munin-contrib/templates/munstrap/templates/ /etc/munin/munstrap/templates/
+    rsync -av /tmp/munin-contrib/templates/munstrap/static/    /etc/munin/contrib/munstrap/static/
+    rsync -av /tmp/munin-contrib/templates/munstrap/templates/ /etc/munin/contrib/munstrap/templates/
     rm -fr /tmp/munin-contrib
   when: res|changed
 
-- service: name=httpd state=started enabled=yes
+- service: name=munin-node       state=started enabled=yes
+- service: name=munin-fcgi-graph state=started enabled=yes
+- service: name=munin-fcgi-html  state=started enabled=yes
+
+- name: munin-node check
+  shell: echo "fetch load" | nc localhost 4949
+  changed_when: no

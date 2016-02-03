@@ -1,0 +1,17 @@
+---
+
+- yum: name={{ item }}
+  with_items:
+    - "http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm"
+
+- yum: name={{ item }}
+  with_items:
+    - nginx
+    - munin-nginx
+
+- copy: src={{ item }} dest=/etc/nginx/conf.d
+  with_fileglob:
+    - conf.d/*.conf
+  notify:
+    - nginx check
+    - nginx restart

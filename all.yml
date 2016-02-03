@@ -3,10 +3,11 @@
 - hosts: munin-node-servers
   sudo: yes
   roles:
-    - node
-    - snmp
+    - { role: node, tags: node }
+    - { role: snmp, tags: snmp }
 
 - hosts: munin-master-servers
   sudo: yes
   roles:
-    - munin
+    - { role: munin, tags: munin }
+    - { role: nginx, tags: nginx }

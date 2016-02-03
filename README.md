@@ -38,3 +38,8 @@ open http://localhost:1234/
 ----
 
 See: [Munin を触ってみた - Qiita](http://qiita.com/ngyuki/items/9ceac312d9dadc52d659)
+
+----
+
+- nginx と fcgi で実行するようにしてみました（nginx ブランチ）
+- Ansible のプレイブックは上手く動かないかもしれません

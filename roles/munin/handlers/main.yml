@@ -2,3 +2,9 @@
 
 - name: munin-node restart
   service: name=munin-node state=restarted
+
+- name: munin-fcgi-graph restart
+  service: name=munin-fcgi-graph state=restarted
+
+- name: munin-fcgi-html restart
+  service: name=munin-fcgi-html state=restarted
