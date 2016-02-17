@@ -1,0 +1,4 @@
+[ping_192.168.33.10]
+host_name web-ping
+env.ping_args -c 3 -w 5
+env.packetloss_critical 50

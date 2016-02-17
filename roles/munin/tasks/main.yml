@@ -15,6 +15,13 @@
     - /etc/munin/munin-node.conf
     - /etc/munin/conf.d/example.conf
     - /etc/munin/plugin-conf.d/zzz-snmp
+    - /etc/munin/plugin-conf.d/zzz-ping
+  notify:
+    - munin-node restart
+
+- template: src={{ item }} dest=//etc/munin/conf.d/
+  with_items:
+    - contact.conf
   notify:
     - munin-node restart
 
@@ -29,6 +36,11 @@
   shell: |
     munin-node-configure --snmp 192.168.33.10 --snmpcommunity oreore --shell | bash -x
   when: res|changed
+
+# manual プラグイン
+- file: src={{ item.src }} path=/etc/munin/plugins/{{ item.dest }} state=link
+  with_items:
+    - { src: /usr/share/munin/plugins/ping_, dest: ping_192.168.33.10 }
 
 - stat: path=/etc/munin/contrib/munstrap/templates/
   register: res
