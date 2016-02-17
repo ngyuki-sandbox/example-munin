@@ -41,6 +41,8 @@
 - file: src={{ item.src }} path=/etc/munin/plugins/{{ item.dest }} state=link
   with_items:
     - { src: /usr/share/munin/plugins/ping_, dest: ping_192.168.33.10 }
+    - { src: /usr/share/munin/plugins/ping_, dest: ping_192.168.33.11 }
+    - { src: /usr/share/munin/plugins/ping_, dest: ping_192.168.33.12 }
 
 - stat: path=/etc/munin/contrib/munstrap/templates/
   register: res
