@@ -28,17 +28,34 @@
   shell: htpasswd -bc /etc/munin/munin-htpasswd munin pass
   when: res|changed
 
-- name: munin snmp plugin check
-  shell: |
-    munin-node-configure --snmp 192.168.33.10 --snmpcommunity oreore --shell
+- stat: path=/etc/munin/plugins/entropy
   register: res
-  always_run: yes
-  changed_when: res.stdout|length
+  changed_when: res.stat.exists
 
-- name: munin snmp plugin install
-  shell: |
-    munin-node-configure --snmp 192.168.33.10 --snmpcommunity oreore --shell | bash -x
+- shell: rm -f /etc/munin/plugins/*
   when: res|changed
+  notify:
+    - munin-node restart
+
+- file: src={{ item.value }} dest=/etc/munin/plugins/{{ item.key }} state=link
+  with_dict:
+    cpu: /usr/share/munin/plugins/cpu
+    df: /usr/share/munin/plugins/df
+    diskstats: /usr/share/munin/plugins/diskstats
+  notify:
+    - munin-node restart
+
+#- name: munin snmp plugin check
+#  shell: |
+#    munin-node-configure --snmp 192.168.33.10 --snmpcommunity oreore --shell
+#  register: res
+#  always_run: yes
+#  changed_when: res.stdout|length
+
+#- name: munin snmp plugin install
+#  shell: |
+#    munin-node-configure --snmp 192.168.33.10 --snmpcommunity oreore --shell | bash -x
+#  when: res|changed
 
 - stat: path=/etc/munin/munstrap/templates/
   register: res

@@ -14,6 +14,54 @@
   notify:
     - munin-node restart
 
+- stat: path=/etc/munin/plugins/entropy
+  register: res
+  changed_when: res.stat.exists
+
+- shell: rm -f /etc/munin/plugins/*
+  when: res|changed
+  notify:
+    - munin-node restart
+
+# plugin enable
+- file: src={{ item.value }} dest=/etc/munin/plugins/{{ item.key }} state=link
+  with_dict:
+    cpu: /usr/share/munin/plugins/cpu
+    df: /usr/share/munin/plugins/df
+    diskstats: /usr/share/munin/plugins/diskstats
+  notify:
+    - munin-node restart
+
+# plugin disable
+- file: path=/etc/munin/plugins/{{ item.key }} state=absent
+  with_dict:
+    df_inode: /usr/share/munin/plugins/df_inode
+    entropy: /usr/share/munin/plugins/entropy
+    forks: /usr/share/munin/plugins/forks
+    fw_packets: /usr/share/munin/plugins/fw_packets
+    if_enp0s3: /usr/share/munin/plugins/if_
+    if_enp0s8: /usr/share/munin/plugins/if_
+    if_err_enp0s3: /usr/share/munin/plugins/if_err_
+    if_err_enp0s8: /usr/share/munin/plugins/if_err_
+    interrupts: /usr/share/munin/plugins/interrupts
+    irqstats: /usr/share/munin/plugins/irqstats
+    load: /usr/share/munin/plugins/load
+    memory: /usr/share/munin/plugins/memory
+    netstat: /usr/share/munin/plugins/netstat
+    open_files: /usr/share/munin/plugins/open_files
+    open_inodes: /usr/share/munin/plugins/open_inodes
+    postfix_mailqueue: /usr/share/munin/plugins/postfix_mailqueue
+    postfix_mailvolume: /usr/share/munin/plugins/postfix_mailvolume
+    proc_pri: /usr/share/munin/plugins/proc_pri
+    processes: /usr/share/munin/plugins/processes
+    swap: /usr/share/munin/plugins/swap
+    threads: /usr/share/munin/plugins/threads
+    uptime: /usr/share/munin/plugins/uptime
+    users: /usr/share/munin/plugins/users
+    vmstat: /usr/share/munin/plugins/vmstat
+  notify:
+    - munin-node restart
+
 - service: name=munin-node state=started enabled=yes
 
 - name: munin-node check
