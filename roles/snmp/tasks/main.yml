@@ -1,9 +1,9 @@
 ---
 
-- yum: name={{ item }}
-  with_items:
-    - net-snmp
-    - net-snmp-utils
+#- yum: name={{ item }}
+#  with_items:
+#    - net-snmp
+#    - net-snmp-utils
 
 - copy: src={{ item }} dest=/etc/snmp/
   with_items:

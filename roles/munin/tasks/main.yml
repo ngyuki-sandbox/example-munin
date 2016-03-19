@@ -1,15 +1,15 @@
 ---
 
-- yum: name={{ item }}
-  with_items:
-    - epel-release
-
-- yum: name={{ item }}
-  with_items:
-    - httpd
-    - munin
-    - munin-cgi
-    - net-snmp-utils
+#- yum: name={{ item }}
+#  with_items:
+#    - epel-release
+#
+#- yum: name={{ item }}
+#  with_items:
+#    - httpd
+#    - munin
+#    - munin-cgi
+#    - net-snmp-utils
 
 - copy: src=./{{ item }} dest=/{{ item }}
   with_items:
