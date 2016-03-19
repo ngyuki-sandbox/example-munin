@@ -11,12 +11,12 @@
 #    - munin-cgi
 #    - net-snmp-utils
 
-- copy: src=./{{ item }} dest=/{{ item }}
+- copy: src=./{{ item }} dest=/etc/munin/{{ item }}
   with_items:
-    - /etc/munin/munin.conf
-    - /etc/munin/munin-node.conf
-    - /etc/munin/conf.d/example.conf
-    - /etc/munin/plugin-conf.d/zzz-snmp
+    - munin.conf
+    - munin-node.conf
+    - conf.d/example.conf
+    - plugin-conf.d/zzz-snmp
   notify:
     - munin-node restart
 

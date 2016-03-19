@@ -3,7 +3,7 @@
 - hosts: munin-node-servers
   sudo: yes
   roles:
-    - node
+    - munin-node
     - snmp
 
 - hosts: munin-master-servers

@@ -8,9 +8,9 @@
 #  with_items:
 #    - munin-node
 
-- copy: src=./{{ item }} dest=/{{ item }}
+- copy: src=./{{ item }} dest=/etc/munin/{{ item }}
   with_items:
-    - /etc/munin/munin-node.conf
+    - munin-node.conf
   notify:
     - munin-node restart
 
