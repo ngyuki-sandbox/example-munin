@@ -17,8 +17,8 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
     sudo yum -y install vim-enhanced mailx nc rsync epel-release
     sudo yum -y install ansible
-    cp /vagrant/hosts.ini /home/vagrant/
-    chmod -x /home/vagrant/hosts.ini
+    cp -v /vagrant/hosts.ini /home/vagrant/
+    chmod -v -x /home/vagrant/hosts.ini
   SHELL
 
   config.vm.provider :virtualbox do |v|
